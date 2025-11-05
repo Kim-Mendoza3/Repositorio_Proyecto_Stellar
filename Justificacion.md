@@ -23,10 +23,10 @@ El objetivo es fomentar la transparencia, la colaboración y el aprendizaje expe
 ## 🎯 Objetivo SMART
 
 * **S (Específico):** Crear una dApp funcional que permita a los estudiantes registrar viajes, gestionar patrocinios y recibir tokens de recompensa.
-* **M (Medible):** Desplegar un MVP capaz de procesar al menos **5 solicitudes de viaje** y **5 contratos inteligentes** en una red de prueba.
-* **A (Alcanzable):** Implementar la solución usando **Soroban**, **Rust**, **React** y **TailwindCSS**, con un equipo multidisciplinario.
+* **M (Medible):** Desplegar un MVP capaz de procesar al menos **3 solicitudes de viaje** y **3 contratos inteligentes** en una red de prueba.
+* **A (Alcanzable):** Implementar la solución usando **Soroban**, **Rust** y **React**, con un equipo multidisciplinario.
 * **R (Relevante):** Facilita el acceso a oportunidades académicas con financiamiento verificable y transparente.
-* **T (Limitado en tiempo):** Completar el MVP en **12 semanas**.
+* **T (Limitado en tiempo):** Completar el MVP en **4 a 5 semanas**.
 
 ---
 
@@ -78,11 +78,11 @@ Esta plataforma descentralizada **conecta estudiantes y patrocinadores** mediant
 
 | Rol                              | Descripción                                                   | Responsable                |
 | -------------------------------- | ------------------------------------------------------------- | -------------------------- |
-| **Product Owner / Coordinador**  | Supervisa la visión general y comunicación con stakeholders.  | [Asignar integrante]       |
-| **Smart Contract Developer**     | Desarrolla contratos y funciones de financiamiento.           | [Asignar integrante]       |
-| **Front-End Developer**          | Diseña la interfaz y conecta la wallet del usuario.           | [Asignar integrante]       |
-| **Back-End / API Developer**     | Administra APIs y sincronización de datos on-chain.           | [Asignar integrante]       |
-| **QA / Tester**                  | Realiza pruebas unitarias e integrales.                       | [Asignar integrante]       |
+| **Product Owner / Coordinador**  | Supervisa la visión general y comunicación con stakeholders.  | Kimberly Mendoza Hernandez       |
+| **Smart Contract Developer**     | Desarrolla contratos y funciones de financiamiento.           | Arcangel Gonzalez Cruz       |
+| **Front-End Developer**          | Diseña la interfaz y conecta la wallet del usuario.           | Angel Antonio Lopez Perez       |
+| **Back-End / API Developer**     | Administra APIs y sincronización de datos on-chain.           | Arcangel Gonzalez Cruz      |
+| **QA / Tester**                  | Realiza pruebas unitarias e integrales.                       | Arcangel Gonzalez Cruz   |
 | **Documentación y Comunicación** | Redacta informes, actualiza el repositorio y gestiona tareas. | Kimberly Mendoza Hernández |
 
 ---
@@ -92,7 +92,7 @@ Esta plataforma descentralizada **conecta estudiantes y patrocinadores** mediant
 1. **Tiempo de respuesta:** todos los mensajes y issues deben responderse en un máximo de **24 horas hábiles**.
 2. **Canales oficiales:**
 
-   * Comunicación rápida: **Discord / Telegram**.
+   * Comunicación rápida: **Discord / WhatsApp**.
    * Seguimiento técnico: **GitHub Issues & Projects**.
    * Documentación: **Repositorio principal (rama docs/main)**.
 3. **Reuniones:**
@@ -107,21 +107,19 @@ Esta plataforma descentralizada **conecta estudiantes y patrocinadores** mediant
 
 ## 📦 Entregables del Proyecto
 
-* **README.md** (documento de propuesta).
 * **Repositorio GitHub** con:
 
   * Código fuente de contratos inteligentes.
   * Interfaz web funcional (front-end).
   * Documentación técnica y guía de despliegue.
 * **Demo funcional** en testnet.
-* **Video de presentación (3–5 min).**
 * **Reporte final de evaluación y lecciones aprendidas.**
 
 ---
 
 ## 📊 Indicadores de Éxito (KPIs)
 
-* 5 contratos inteligentes ejecutados correctamente en testnet.
+* 3 contratos inteligentes ejecutados correctamente en testnet.
 * 100% de liberaciones automáticas verificadas por contrato.
 * Respuesta promedio ≤ 24h en issues.
 * Satisfacción de patrocinadores ≥ 4/5.
@@ -160,13 +158,15 @@ Esta plataforma descentralizada **conecta estudiantes y patrocinadores** mediant
 
 ## 📎 Recursos y Enlaces
 
-* **Repositorio GitHub:** *[https://github.com/[organizacion]/viajes-estudiantiles-dapp](https://github.com/[organizacion]/viajes-estudiantiles-dapp)*
+* **Repositorio GitHub:** *[]*
 * **Plantillas de Issues:** `issue: contrato-base`, `issue: ui-prototipo`, `issue: pruebas-integracion`.
 * **Tecnologías clave:** Soroban, Rust, React, TailwindCSS, Metamask Testnet.
 
 ---
 
 **Firma:**
-✍️ *Kimberly Mendoza Hernández*
+*Kimberly Mendoza Hernández*
+*Angel Antonio Lopez Perez*
+*Arcangel Gonzalez Cruz*
 *Tecnológico Nacional de México en Tlaxiaco*
-*Propuesta Final — Unidad CASE*
+*Propuesta Final*
