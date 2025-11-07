@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8fafc; /* light slate */
+  --foreground: #0f172a; /* slate-900 */
+  --primary: #0ea5a4; /* teal-500 */
+  --accent: #06b6d4; /* cyan-500 */
+  --muted: #94a3b8; /* slate-400 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #071124; /* dark navy */
+    --foreground: #e6eef6; /* light */
+    --primary: #0891b2; /* teal-600 */
+    --accent: #06b6d4;
+    --muted: #94a3b8;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom animations for passkey interactions */
+@keyframes fingerprint-scan {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.fingerprint-scan {
+  animation: fingerprint-scan 2s ease-in-out infinite;
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
