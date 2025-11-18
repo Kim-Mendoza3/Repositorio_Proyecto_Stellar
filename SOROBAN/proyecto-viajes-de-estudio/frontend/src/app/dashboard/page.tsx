@@ -23,10 +23,15 @@ function DashboardContent() {
   const router = useRouter();
   const [session, setSession] = useState<UserSession | null>(null);
   const [copied, setCopied] = useState(false);
+  const [trips, setTrips] = useState<any[]>([]);
 
   useEffect(() => {
     const userSession = SessionManager.getSession();
     setSession(userSession);
+    
+    // Cargar viajes aprobados
+    const approvedTrips = JSON.parse(localStorage.getItem('approvedTrips') || '[]');
+    setTrips(approvedTrips);
   }, []);
 
   const handleCopyWallet = () => {
@@ -199,25 +204,6 @@ function DashboardContent() {
             <p className="text-white/90 text-sm drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Solicita apoyo económico para tu viaje de estudios; estudia ahora, paga después en condiciones preferenciales.</p>
           </button>
 
-          {/* Ver Score */}
-          <button
-            onClick={() => router.push('/ebas-credit')}
-            className="bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl p-6 text-gray-900 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 text-left"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-2 drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Tu Score Crediticio</h3>
-            <p className="text-white/90 text-sm drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Revisa tu evaluación de crédito actual y recomendaciones para mejorar tu elegibilidad.</p>
-          </button>
-
           {/* Historial */}
           <div className="bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-2xl p-6 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
@@ -229,10 +215,33 @@ function DashboardContent() {
               </div>
             </div>
             <h3 className="text-xl font-bold mb-2 drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Mis Viajes</h3>
-            <p className="text-white/90 text-sm mb-4 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Aquí verás tus reservas y viajes pasados. Por ahora no tienes viajes programados.</p>
-            <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
-              Próximamente: exportar itinerarios
-            </div>
+            {trips.length === 0 ? (
+              <>
+                <p className="text-white/90 text-sm mb-4 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>No tienes viajes aprobados aún.</p>
+                <button
+                  onClick={() => router.push('/ebas-credit')}
+                  className="px-4 py-2 bg-white text-emerald-600 rounded-lg font-semibold hover:bg-slate-100 transition"
+                >
+                  Solicitar Viaje
+                </button>
+              </>
+            ) : (
+              <div className="space-y-3">
+                {trips.map((trip) => (
+                  <div key={trip.id} className="bg-white/10 rounded-lg p-3 border border-white/20">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-bold text-white">{trip.packageName}</h4>
+                      <span className="text-xs bg-green-400 text-slate-900 px-2 py-1 rounded-full font-semibold">{trip.status}</span>
+                    </div>
+                    <p className="text-sm text-white/80 mb-2">Empresa: {trip.companyName}</p>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-white/70">
+                      <div>Costo: ${trip.totalCost.toLocaleString()}</div>
+                      <div>Mensualidades: ${trip.monthlyPayment} × {trip.loanTerm}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

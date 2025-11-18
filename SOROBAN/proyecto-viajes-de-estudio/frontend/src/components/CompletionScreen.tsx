@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 
 interface CompletionScreenProps {
@@ -20,6 +20,24 @@ export default function CompletionScreen({
   loanTerm,
   userAddress,
 }: CompletionScreenProps) {
+  useEffect(() => {
+    // Guardar el viaje aprobado en localStorage
+    const trip = {
+      id: Date.now().toString(),
+      packageName,
+      companyName,
+      totalCost,
+      monthlyPayment,
+      loanTerm,
+      approvalDate: new Date().toISOString(),
+      status: 'Aprobado',
+    };
+    
+    const trips = JSON.parse(localStorage.getItem('approvedTrips') || '[]');
+    trips.push(trip);
+    localStorage.setItem('approvedTrips', JSON.stringify(trips));
+  }, [packageName, companyName, totalCost, monthlyPayment, loanTerm]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-slate-900 to-cyan-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
