@@ -88,10 +88,10 @@ function DashboardContent() {
                 </span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-800">
+                <h1 className="text-2xl font-black text-white drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.7), -1px -1px 2px rgba(255,255,255,0.3)' }}>
                   ¡Hola, {session.user.username}!
                 </h1>
-                <p className="text-sm text-gray-500">Bienvenido al panel de StudyTrips — administra tus viajes y financiamiento</p>
+                <p className="text-sm text-slate-100 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Bienvenido al panel de StudyTrips — administra tus viajes y financiamiento</p>
               </div>
             </div>
             
@@ -119,19 +119,19 @@ function DashboardContent() {
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Sesión Activa</h2>
-              <p className="text-sm text-yellow-200">Autenticado con Passkey</p>
+              <h2 className="text-lg font-bold text-white drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Sesión Activa</h2>
+              <p className="text-sm text-yellow-200 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Autenticado con Passkey</p>
             </div>
           </div>
           
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
               <div>
-                <p className="text-sm text-amber-200">Cuenta Stellar (testnet)</p>
-                <p className="font-mono text-sm text-white break-all">
+                <p className="text-sm text-amber-200 font-semibold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Cuenta Stellar (testnet)</p>
+                <p className="font-mono text-sm text-white break-all drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
                   {session.user.walletAddress}
                 </p>
-                <div className="mt-1 text-xs text-sky-100/80">Operamos en: <span className="font-semibold">México</span></div>
+                <div className="mt-1 text-xs text-sky-100/80 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Operamos en: <span className="font-semibold">México</span></div>
               </div>
               <button
                 onClick={handleCopyWallet}
@@ -157,22 +157,22 @@ function DashboardContent() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-amber-200 mb-1">Usuario</p>
-                <p className="font-semibold text-white">{session.user.username}</p>
+                <p className="text-xs text-amber-200 mb-1 font-bold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Usuario</p>
+                <p className="font-bold text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>{session.user.username}</p>
               </div>
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-amber-200 mb-1">Sesión expira</p>
-                <p className="font-semibold text-white text-sm">
+                <p className="text-xs text-amber-200 mb-1 font-bold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Sesión expira</p>
+                <p className="font-bold text-white text-sm drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
                   {new Date(session.expiresAt).toLocaleDateString('es-ES')}
                 </p>
               </div>
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-amber-200 mb-1">Rol</p>
-                <p className="font-semibold text-white">Estudiante</p>
+                <p className="text-xs text-amber-200 mb-1 font-bold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Rol</p>
+                <p className="font-bold text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Estudiante</p>
               </div>
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-amber-200 mb-1">Convenio</p>
-                <p className="font-semibold text-white">Universidad Nacional (ejemplo)</p>
+                <p className="text-xs text-amber-200 mb-1 font-bold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Convenio</p>
+                <p className="font-bold text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Universidad Nacional (ejemplo)</p>
               </div>
             </div>
           </div>
@@ -195,8 +195,8 @@ function DashboardContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-2">Solicitar Financiamiento para Viaje</h3>
-            <p className="text-white/80 text-sm">Solicita apoyo económico para tu viaje de estudios; estudia ahora, paga después en condiciones preferenciales.</p>
+            <h3 className="text-xl font-bold mb-2 drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Solicitar Financiamiento para Viaje</h3>
+            <p className="text-white/90 text-sm drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Solicita apoyo económico para tu viaje de estudios; estudia ahora, paga después en condiciones preferenciales.</p>
           </button>
 
           {/* Ver Score */}
@@ -214,8 +214,8 @@ function DashboardContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-2">Tu Score Crediticio</h3>
-            <p className="text-white/80 text-sm">Revisa tu evaluación de crédito actual y recomendaciones para mejorar tu elegibilidad.</p>
+            <h3 className="text-xl font-bold mb-2 drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Tu Score Crediticio</h3>
+            <p className="text-white/90 text-sm drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Revisa tu evaluación de crédito actual y recomendaciones para mejorar tu elegibilidad.</p>
           </button>
 
           {/* Historial */}
@@ -228,9 +228,9 @@ function DashboardContent() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Mis Viajes</h3>
-            <p className="text-white/80 text-sm mb-4">Aquí verás tus reservas y viajes pasados. Por ahora no tienes viajes programados.</p>
-            <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold">
+            <h3 className="text-xl font-bold mb-2 drop-shadow-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>Mis Viajes</h3>
+            <p className="text-white/90 text-sm mb-4 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Aquí verás tus reservas y viajes pasados. Por ahora no tienes viajes programados.</p>
+            <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
               Próximamente: exportar itinerarios
             </div>
           </div>
@@ -243,22 +243,22 @@ function DashboardContent() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <h4 className="font-semibold text-amber-200 mb-1">🔒 Sesión Segura</h4>
-              <p className="text-sm text-white">Tu sesión está protegida con Passkey. Tus datos biométricos nunca salen de tu dispositivo.</p>
+              <h4 className="font-bold text-amber-200 mb-1 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>🔒 Sesión Segura</h4>
+              <p className="text-sm text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Tu sesión está protegida con Passkey. Tus datos biométricos nunca salen de tu dispositivo.</p>
             </div>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <h4 className="font-semibold text-amber-200 mb-1">✈️ Operamos en</h4>
-            <p className="text-sm text-white">Actualmente ofrecemos viajes y convenios dentro de <strong>México</strong>. Pronto ampliaremos destinos.</p>
+            <h4 className="font-bold text-amber-200 mb-1 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>✈️ Operamos en</h4>
+            <p className="text-sm text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Actualmente ofrecemos viajes y convenios dentro de <strong>México</strong>. Pronto ampliaremos destinos.</p>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
-            <h4 className="font-semibold text-amber-200">¿Necesitas ayuda?</h4>
-            <p className="text-sm text-white">Contacta a un asesor académico para recibir apoyo personalizado en tu postulación y financiamiento.</p>
+            <h4 className="font-bold text-amber-200 drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>¿Necesitas ayuda?</h4>
+            <p className="text-sm text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Contacta a un asesor académico para recibir apoyo personalizado en tu postulación y financiamiento.</p>
             <div className="mt-2 flex gap-2">
-              <button onClick={() => router.push('/contact')} className="px-3 py-2 bg-amber-500 text-slate-900 rounded-md font-semibold">Contactar Asesor</button>
-              <button onClick={() => router.push('/convenios')} className="px-3 py-2 border border-white/10 rounded-md">Ver Convenios</button>
+              <button onClick={() => router.push('/contact')} className="px-3 py-2 bg-amber-500 text-slate-900 rounded-md font-bold drop-shadow-lg" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>Contactar Asesor</button>
+              <button onClick={() => router.push('/convenios')} className="px-3 py-2 border border-white/10 rounded-md font-bold text-white drop-shadow-md" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Ver Convenios</button>
             </div>
           </div>
         </div>

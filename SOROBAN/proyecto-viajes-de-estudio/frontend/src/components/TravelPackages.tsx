@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { IncomeData } from "@/types/income";
 
 export interface TravelPackage {
   id: string;
@@ -17,7 +16,6 @@ export interface TravelPackage {
 }
 
 interface TravelPackagesProps {
-  incomeData: IncomeData;
   onSelectPackage: (pkg: TravelPackage) => void;
   onBack: () => void;
 }
@@ -146,7 +144,6 @@ const packages: TravelPackage[] = [
 ];
 
 export default function TravelPackages({
-  incomeData,
   onSelectPackage,
   onBack,
 }: TravelPackagesProps) {
