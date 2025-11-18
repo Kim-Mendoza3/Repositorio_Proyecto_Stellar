@@ -27,8 +27,8 @@ export default function Home() {
       <section className="relative z-10 px-6 py-20">
         <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Viajes de estudio sin barreras. Financiamiento rápido y seguro.</h1>
-            <p className="text-lg text-sky-100/90 mb-8">Autenticación biométrica con Passkeys, contratos inteligentes en Soroban y un sistema de scoring que aprueba solicitudes en minutos.</p>
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Viajes de estudio sin barreras — Financiamiento rápido y seguro</h1>
+              <p className="text-lg text-sky-100/90 mb-8">Autenticación biométrica con Passkeys, contratos inteligentes en Soroban y un sistema de scoring que aprueba solicitudes en minutos. Financia tu experiencia internacional con confianza.</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
               <div className="flex items-start gap-3">

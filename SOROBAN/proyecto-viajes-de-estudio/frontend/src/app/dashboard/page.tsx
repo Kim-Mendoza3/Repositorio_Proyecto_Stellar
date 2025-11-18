@@ -91,7 +91,7 @@ function DashboardContent() {
                 <h1 className="text-xl font-bold text-gray-800">
                   ¡Hola, {session.user.username}!
                 </h1>
-                <p className="text-sm text-gray-500">Bienvenido a tu dashboard</p>
+                <p className="text-sm text-gray-500">Bienvenido al panel de StudyTrips — administra tus viajes y financiamiento</p>
               </div>
             </div>
             
@@ -127,10 +127,11 @@ function DashboardContent() {
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
               <div>
-                <p className="text-sm text-yellow-200">Stellar Wallet</p>
+                <p className="text-sm text-amber-200">Cuenta Stellar (testnet)</p>
                 <p className="font-mono text-sm text-white break-all">
                   {session.user.walletAddress}
                 </p>
+                <div className="mt-1 text-xs text-sky-100/80">Operamos en: <span className="font-semibold">México</span></div>
               </div>
               <button
                 onClick={handleCopyWallet}
@@ -154,16 +155,24 @@ function DashboardContent() {
               </button>
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-yellow-200 mb-1">Usuario</p>
+                <p className="text-xs text-amber-200 mb-1">Usuario</p>
                 <p className="font-semibold text-white">{session.user.username}</p>
               </div>
               <div className="p-3 bg-white/5 rounded-lg">
-                <p className="text-xs text-yellow-200 mb-1">Sesión expira</p>
+                <p className="text-xs text-amber-200 mb-1">Sesión expira</p>
                 <p className="font-semibold text-white text-sm">
                   {new Date(session.expiresAt).toLocaleDateString('es-ES')}
                 </p>
+              </div>
+              <div className="p-3 bg-white/5 rounded-lg">
+                <p className="text-xs text-amber-200 mb-1">Rol</p>
+                <p className="font-semibold text-white">Estudiante</p>
+              </div>
+              <div className="p-3 bg-white/5 rounded-lg">
+                <p className="text-xs text-amber-200 mb-1">Convenio</p>
+                <p className="font-semibold text-white">Universidad Nacional (ejemplo)</p>
               </div>
             </div>
           </div>
@@ -186,8 +195,8 @@ function DashboardContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-2">Solicitar Préstamo</h3>
-            <p className="text-white/80 text-sm">Accede a crédito rápido basado en tus ingresos</p>
+            <h3 className="text-xl font-bold mb-2">Solicitar Financiamiento para Viaje</h3>
+            <p className="text-white/80 text-sm">Solicita apoyo económico para tu viaje de estudios; estudia ahora, paga después en condiciones preferenciales.</p>
           </button>
 
           {/* Ver Score */}
@@ -206,11 +215,11 @@ function DashboardContent() {
               </svg>
             </div>
             <h3 className="text-xl font-bold mb-2">Tu Score Crediticio</h3>
-            <p className="text-white/80 text-sm">Revisa tu evaluación de crédito actual</p>
+            <p className="text-white/80 text-sm">Revisa tu evaluación de crédito actual y recomendaciones para mejorar tu elegibilidad.</p>
           </button>
 
           {/* Historial */}
-          <div className="bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl p-6 text-white relative overflow-hidden">
+          <div className="bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-2xl p-6 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -219,24 +228,38 @@ function DashboardContent() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Historial</h3>
-            <p className="text-white/80 text-sm mb-4">Próximamente disponible</p>
+            <h3 className="text-xl font-bold mb-2">Mis Viajes</h3>
+            <p className="text-white/80 text-sm mb-4">Aquí verás tus reservas y viajes pasados. Por ahora no tienes viajes programados.</p>
             <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold">
-              Próximamente
+              Próximamente: exportar itinerarios
             </div>
           </div>
         </div>
 
         {/* Info Banner */}
-        <div className="mt-8 bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3">
-          <svg className="w-5 h-5 text-yellow-300 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <h4 className="font-semibold text-yellow-200 mb-1">🔒 Sesión Segura</h4>
-            <p className="text-sm text-white">
-              Tu sesión está protegida con tecnología Passkey. Tus datos biométricos nunca salen de tu dispositivo.
-            </p>
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3">
+            <svg className="w-5 h-5 text-amber-300 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h4 className="font-semibold text-amber-200 mb-1">🔒 Sesión Segura</h4>
+              <p className="text-sm text-white">Tu sesión está protegida con Passkey. Tus datos biométricos nunca salen de tu dispositivo.</p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h4 className="font-semibold text-amber-200 mb-1">✈️ Operamos en</h4>
+            <p className="text-sm text-white">Actualmente ofrecemos viajes y convenios dentro de <strong>México</strong>. Pronto ampliaremos destinos.</p>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
+            <h4 className="font-semibold text-amber-200">¿Necesitas ayuda?</h4>
+            <p className="text-sm text-white">Contacta a un asesor académico para recibir apoyo personalizado en tu postulación y financiamiento.</p>
+            <div className="mt-2 flex gap-2">
+              <button onClick={() => router.push('/contact')} className="px-3 py-2 bg-amber-500 text-slate-900 rounded-md font-semibold">Contactar Asesor</button>
+              <button onClick={() => router.push('/convenios')} className="px-3 py-2 border border-white/10 rounded-md">Ver Convenios</button>
+            </div>
           </div>
         </div>
       </main>
