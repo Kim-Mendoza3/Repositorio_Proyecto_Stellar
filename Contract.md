@@ -106,8 +106,8 @@ La PR fusionada constituye la **evidencia oficial** del contrato firmado digital
 
 | Miembro  | Aprobación PR            | Fecha |
 | -------- | ------------------------ | ----- |
-| Arcangel | | 19/11/25     |
-| Angel Antonio | | 19/11/25     |
+| Arcangel | Aprobado ✔️ | 19/11/25     |
+| Angel Antonio | Aprobado ✔️ | 19/11/25     |
 | Kimberly | Aprobado ✔️  | 19/11/25     |
 
 
