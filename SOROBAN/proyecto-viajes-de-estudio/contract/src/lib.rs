@@ -201,3 +201,13 @@ pub mod trip_contract;
 
 #[cfg(feature = "trip")]
 pub use trip_contract::*;
+
+// Travel Package feature: handles package selection and fund disbursement
+#[cfg(feature = "travel-package")]
+pub mod travel_package_types;
+
+#[cfg(feature = "travel-package")]
+pub mod travel_package_contract;
+
+#[cfg(feature = "travel-package")]
+pub use travel_package_contract::*;
