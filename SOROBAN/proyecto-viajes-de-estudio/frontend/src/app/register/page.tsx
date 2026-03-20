@@ -247,12 +247,35 @@ export default function RegisterNewPage() {
   // ============ UI ============
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 p-4 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-2000"></div>
+      </div>
+
+      <div className="max-w-2xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8 pt-8">
+          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 backdrop-blur-sm px-4 py-2 rounded-full border border-indigo-500/30 mb-6">
+            <Sparkles className="w-5 h-5 text-indigo-400" />
+            <span className="text-sm font-semibold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Bienvenido a StudyTrips</span>
+          </div>
           <h1 className="text-4xl font-bold text-white mb-2">StudyTrips Global</h1>
-          <p className="text-purple-200">Financia tus viajes de estudio con blockchain</p>
+          <p className="text-indigo-200">Financia tus viajes de estudio con blockchain</p>
+          <div className="flex justify-center gap-4 mt-4 text-sm">
+            <div className="flex items-center gap-2 text-indigo-400">
+              <Lock className="w-4 h-4" />
+              <span>100% Seguro</span>
+            </div>
+            <div className="flex items-center gap-2 text-cyan-400">
+              <Globe className="w-4 h-4" />
+              <span>Red Global</span>
+            </div>
+            <div className="flex items-center gap-2 text-teal-400">
+              <Zap className="w-4 h-4" />
+              <span>Instantáneo</span>
+            </div>
+          </div>
         </div>
 
         {/* Progress Indicator */}
@@ -265,7 +288,7 @@ export default function RegisterNewPage() {
             return (
               <div key={label} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  isActive ? 'bg-purple-500 text-white' : 'bg-slate-700 text-slate-400'
+                  isActive ? 'bg-indigo-500 text-white' : 'bg-slate-700 text-slate-400'
                 }`}>
                   {stepNum}
                 </div>
@@ -273,7 +296,7 @@ export default function RegisterNewPage() {
                   {label}
                 </div>
                 {idx < 4 && (
-                  <div className={`w-12 h-0.5 mx-2 ${isActive ? 'bg-purple-500' : 'bg-slate-700'}`} />
+                  <div className={`w-12 h-0.5 mx-2 ${isActive ? 'bg-indigo-500' : 'bg-slate-700'}`} />
                 )}
               </div>
             );
@@ -359,7 +382,7 @@ export default function RegisterNewPage() {
                 Continuar <ArrowRight className="w-4 h-4" />
               </button>
 
-              <Link href="/login" className="text-center text-slate-400 hover:text-purple-300 text-sm mt-4">
+              <Link href="/login" className="text-center text-slate-400 hover:text-indigo-300 text-sm mt-4">
                 Â¿Ya tienes cuenta? Inicia sesiÃ³n
               </Link>
             </form>
@@ -368,28 +391,28 @@ export default function RegisterNewPage() {
 
         {/* PASO 2: SELECCIONAR TIPO */}
         {step === 'usertype' && (
-          <div className="bg-slate-800/50 backdrop-blur border border-purple-500/20 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-2">Â¿Eres estudiante o empresa?</h2>
-            <p className="text-slate-400 mb-6">Elige tu rol para continuar</p>
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/40 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-8 shadow-2xl shadow-indigo-500/20">
+            <h2 className="text-2xl font-bold text-white mb-2">¿Cuál es tu rol?</h2>
+            <p className="text-slate-300 mb-6">Elige tu perfil para continuar</p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
               {/* Cliente */}
               <button
                 onClick={() => handleSelectType('client')}
-                className="p-6 rounded-lg border-2 border-slate-600 hover:border-purple-500 bg-slate-700/30 hover:bg-slate-700/60 transition text-left group"
+                className="p-6 rounded-lg border-2 border-slate-600 hover:border-indigo-500 bg-slate-700/30 hover:bg-slate-700/60 transition text-left group"
               >
-                <User className="w-8 h-8 text-purple-400 mb-3 group-hover:text-purple-300" />
-                <h3 className="font-semibold text-white mb-1">Estudiante ðŸ‘¨â€ðŸŽ“</h3>
+                <User className="w-8 h-8 text-indigo-400 mb-3 group-hover:text-indigo-300" />
+                <h3 className="font-semibold text-white mb-1">Estudiante 🎓</h3>
                 <p className="text-sm text-slate-400">Reserva y financia tus viajes</p>
               </button>
 
               {/* Empresa */}
               <button
                 onClick={() => handleSelectType('company')}
-                className="p-6 rounded-lg border-2 border-slate-600 hover:border-purple-500 bg-slate-700/30 hover:bg-slate-700/60 transition text-left group"
+                className="p-6 rounded-lg border-2 border-slate-600 hover:border-cyan-500 bg-slate-700/30 hover:bg-slate-700/60 transition text-left group"
               >
-                <Building2 className="w-8 h-8 text-purple-400 mb-3 group-hover:text-purple-300" />
-                <h3 className="font-semibold text-white mb-1">Empresa ðŸ¢</h3>
+                <Building2 className="w-8 h-8 text-cyan-400 mb-3 group-hover:text-cyan-300" />
+                <h3 className="font-semibold text-white mb-1">Empresa 🏢</h3>
                 <p className="text-sm text-slate-400">Ofrece viajes estudiantiles</p>
               </button>
             </div>
@@ -496,7 +519,7 @@ export default function RegisterNewPage() {
 
         {/* PASO 4: CONECTAR WALLET */}
         {step === 'wallet' && (
-          <div className="bg-slate-800/50 backdrop-blur border border-purple-500/20 rounded-xl p-8">
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/40 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-8 shadow-2xl shadow-indigo-500/20">
             <h2 className="text-2xl font-bold text-white mb-2">Vincula tu Wallet</h2>
             <p className="text-slate-400 mb-6">Elige cÃ³mo conectar tu wallet Stellar</p>
 
@@ -592,7 +615,7 @@ export default function RegisterNewPage() {
               {/* OpciÃ³n 3: Crear nueva */}
               <button
                 onClick={handleCreateWallet}
-                className="w-full px-6 py-3 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-purple-200 font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full px-6 py-3 border border-indigo-500/50 hover:border-indigo-400 text-indigo-300 hover:text-indigo-200 font-semibold rounded-lg transition flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 ðŸŸ£ OpciÃ³n 3: Crear Nueva Wallet en Freighter
@@ -610,7 +633,7 @@ export default function RegisterNewPage() {
 
         {/* PASO 5: Ã‰XITO */}
         {step === 'success' && (
-          <div className="bg-slate-800/50 backdrop-blur border border-purple-500/20 rounded-xl p-8 text-center">
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/40 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-8 text-center">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-3xl font-bold text-white mb-2">Â¡Bienvenido!</h2>
             <p className="text-slate-400 mb-6">
@@ -618,7 +641,7 @@ export default function RegisterNewPage() {
             </p>
             <p className="text-sm text-slate-500">Redirigiendo al dashboard...</p>
             <div className="mt-6 flex justify-center">
-              <Loader className="w-6 h-6 text-purple-400 animate-spin" />
+              <Loader className="w-6 h-6 text-indigo-400 animate-spin" />
             </div>
           </div>
         )}
