@@ -12,9 +12,6 @@
   # Build command: install with devDependencies, then build
   command = "npm install --legacy-peer-deps --include=dev && npm run build"
   
-  # Let plugin-nextjs handle the output
-  publish = ".next"
-  
   # Include Node modules in cache (faster builds)
   ignore = "git diff --quiet HEAD^ HEAD -- SOROBAN/proyecto-viajes-de-estudio/frontend"
 
@@ -47,16 +44,5 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
 
-# Redirect all 404s to index.html for Next.js client-side routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-
-# API routes (Next.js handles these automatically)
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = false
+# Nota: con @netlify/plugin-nextjs, los redirects y funciones se generan
+# automáticamente durante el build.
