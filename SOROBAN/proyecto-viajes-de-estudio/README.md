@@ -2,6 +2,12 @@
 
 Aplicación demo que muestra autenticación con Passkeys (WebAuthn) y funcionalidades para gestionar viajes de estudio: roles (estudiantes, empresas, escuela), solicitudes de viaje y panel de control. Basado en la plantilla original de Soroban/Passkey pero adaptado para la temática de viajes de estudio.
 
+## 📁 Estructura Monolítica y Documentación
+
+- Código fuente principal: `contract/`, `frontend/`, `scripts/`, `mcp-servers/`
+- Documentación consolidada del subproyecto: `docs/`
+- Índice recomendado de lectura: `docs/indice/DOCUMENTATION-INDEX.md`
+
 ## 🎯 Estado Actual (Fase MVP)
 
 **Funcionalidades Operativas:**
@@ -58,7 +64,7 @@ Aplicación demo que muestra autenticación con Passkeys (WebAuthn) y funcionali
 ```bash
 # Clonar el proyecto
 git clone <tu-repo>
-cd soroban-passkey-demo
+cd SOROBAN/proyecto-viajes-de-estudio
 
 # Instalar dependencias del contrato
 cd contract
@@ -72,25 +78,31 @@ npm install
 npm run dev
 ```
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura del Proyecto (Monolítica)
 
 ```
-soroban-passkey-demo/
-├── contract/               # Contrato Soroban en Rust
-│   ├── src/
-│   │   ├── lib.rs         # Contrato principal con __check_auth
-│   │   └── test.rs        # Tests del contrato
-│   ├── Cargo.toml
-│   └── Makefile
-├── frontend/              # Aplicación Next.js
-│   ├── src/
-│   │   ├── app/          # App Router de Next.js 14
-│   │   ├── components/   # Componentes React
-│   │   ├── hooks/        # Custom hooks (usePasskey, useStellar)
-│   │   └── lib/          # Utilidades y configuración
-│   ├── package.json
-│   └── next.config.js
-├── scripts/              # Scripts de deployment
+proyecto-viajes-de-estudio/
+├── docs/                          # Documentación centralizada por dominios
+│   ├── arquitectura/
+│   ├── deployment/
+│   ├── freighter/
+│   ├── guias/
+│   ├── implementacion/
+│   ├── indice/
+│   ├── pagos/
+│   ├── planificacion/
+│   ├── resumen/
+│   └── testing/
+├── frontend/                      # Aplicación Next.js (App Router)
+├── contract/                      # Contrato Soroban en Rust
+├── config/                        # Configuración técnica del proyecto
+│   └── CONFIGURATION.js
+├── scripts/                       # Scripts auxiliares organizados
+│   ├── deploy/                    # Deploys y quickstart
+│   ├── testing/                   # Pruebas y validaciones
+│   └── tools/                     # Utilidades (dashboard, setup, helpers)
+├── mcp-servers/                   # Servidores MCP y utilidades de integración
+├── data/                          # Datos y artefactos del flujo de negocio
 └── README.md
 ```
 

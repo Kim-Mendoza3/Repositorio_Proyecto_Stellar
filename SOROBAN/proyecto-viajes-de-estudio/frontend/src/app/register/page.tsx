@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useWallet } from '@/contexts/WalletContext';
 import { useUserRegistry, type UserType } from '@/hooks/useUserRegistry';
 import { usePersistUserRegistry } from '@/hooks/usePersistUserRegistry';
-import { Download, CheckCircle, AlertCircle, ArrowRight, Loader, Building2, User, LogIn } from 'lucide-react';
+import { Download, CheckCircle, AlertCircle, ArrowRight, Loader, Building2, User, LogIn, Sparkles, Globe, Lock, Zap, Mail, Phone } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RegisterNewPage() {
@@ -300,19 +300,28 @@ export default function RegisterNewPage() {
 
         {/* PASO 1: DATOS DEL USUARIO */}
         {step === 'userdata' && (
-          <div className="bg-slate-800/50 backdrop-blur border border-purple-500/20 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">CuÃ©ntanos sobre ti</h2>
-            
-            <form onSubmit={handleUserDataSubmit} className="space-y-4">
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/40 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-8 shadow-2xl shadow-indigo-500/20">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-2 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-lg">
+                <User className="w-6 h-6 text-white" />
+              </div>
               <div>
-                <label className="block text-sm font-medium text-purple-200 mb-2">
+                <h2 className="text-3xl font-bold text-white">Cuéntanos sobre ti</h2>
+                <p className="text-slate-400 text-sm">Comienza compartiendo tu información básica</p>
+              </div>
+            </div>
+            
+            <form onSubmit={handleUserDataSubmit} className="space-y-6">
+              <div className="group">
+                <label className="block text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
                   Nombre completo *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                  className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                   placeholder="Tu nombre"
                 />
               </div>
@@ -325,7 +334,7 @@ export default function RegisterNewPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                  className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -338,14 +347,14 @@ export default function RegisterNewPage() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                  className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                   placeholder="+1234567890"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full mt-6 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/50 hover:scale-105 active:scale-95"
               >
                 Continuar <ArrowRight className="w-4 h-4" />
               </button>
@@ -387,7 +396,7 @@ export default function RegisterNewPage() {
 
             <button
               onClick={() => setStep('userdata')}
-              className="w-full px-6 py-2 border border-slate-600 text-slate-300 rounded-lg hover:border-purple-500 hover:text-purple-300 transition"
+              className="w-full px-6 py-3 border-2 border-slate-600/50 hover:border-slate-500 text-slate-300 hover:text-indigo-300 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-700/30"
             >
               Volver
             </button>
@@ -396,64 +405,71 @@ export default function RegisterNewPage() {
 
         {/* PASO 3: FORMULARIO POR TIPO */}
         {step === 'usertype-form' && selectedUserType && (
-          <div className="bg-slate-800/50 backdrop-blur border border-purple-500/20 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-700/40 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-8 shadow-2xl shadow-indigo-500/20">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-white mb-2">
               {selectedUserType === 'company' ? 'InformaciÃ³n de Empresa' : 'InformaciÃ³n de Estudiante'}
-            </h2>
+              </h2>
+              <p className="text-slate-400 text-sm">Completa los detalles de tu perfil</p>
+            </div>
 
-            <form onSubmit={handleTypeFormSubmit} className="space-y-4">
+            <form onSubmit={handleTypeFormSubmit} className="space-y-6">
               {selectedUserType === 'company' ? (
                 <>
-                  <div>
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+                      <Building2 className="w-4 h-4" />
                       Nombre de Empresa *
                     </label>
                     <input
                       type="text"
                       value={formData.companyName}
                       onChange={(e) => setFormData({...formData, companyName: e.target.value})}
-                      className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                      className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                       placeholder="Nombre de tu empresa"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+                      <Lock className="w-4 h-4" />
                       Licencia Comercial *
                     </label>
                     <input
                       type="text"
                       value={formData.businessLicense}
                       onChange={(e) => setFormData({...formData, businessLicense: e.target.value})}
-                      className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                      className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                       placeholder="NÃºmero de licencia"
                     />
                   </div>
                 </>
               ) : (
                 <>
-                  <div>
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+                      <Building2 className="w-4 h-4" />
                       Escuela *
                     </label>
                     <input
                       type="text"
                       value={formData.school}
                       onChange={(e) => setFormData({...formData, school: e.target.value})}
-                      className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                      className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                       placeholder="Nombre de tu escuela"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+                      <User className="w-4 h-4" />
                       ID de Estudiante *
                     </label>
                     <input
                       type="text"
                       value={formData.studentId}
                       onChange={(e) => setFormData({...formData, studentId: e.target.value})}
-                      className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                      className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
                       placeholder="Tu ID de estudiante"
                     />
                   </div>
@@ -462,7 +478,7 @@ export default function RegisterNewPage() {
 
               <button
                 type="submit"
-                className="w-full mt-6 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/50 hover:scale-105 active:scale-95"
               >
                 Continuar <ArrowRight className="w-4 h-4" />
               </button>
@@ -470,7 +486,7 @@ export default function RegisterNewPage() {
               <button
                 type="button"
                 onClick={() => setStep('usertype')}
-                className="w-full px-6 py-2 border border-slate-600 text-slate-300 rounded-lg hover:border-purple-500 hover:text-purple-300 transition"
+                className="w-full px-6 py-3 border-2 border-slate-600/50 hover:border-slate-500 text-slate-300 hover:text-indigo-300 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-700/30"
               >
                 Volver
               </button>
@@ -585,7 +601,7 @@ export default function RegisterNewPage() {
 
             <button
               onClick={() => setStep('usertype')}
-              className="w-full px-6 py-2 border border-slate-600 text-slate-300 rounded-lg hover:border-purple-500 hover:text-purple-300 transition"
+              className="w-full px-6 py-3 border-2 border-slate-600/50 hover:border-slate-500 text-slate-300 hover:text-indigo-300 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-700/30"
             >
               Volver
             </button>
