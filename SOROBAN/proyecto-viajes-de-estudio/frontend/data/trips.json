@@ -90,5 +90,21 @@
     "highlights": [
       "Tequila"
     ]
+  },
+  {
+    "id": "trip_1774047774181",
+    "companyWallet": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
+    "name": "Hack Alebrije",
+    "destination": "CDMX",
+    "duration": "5",
+    "priceXLM": 500000,
+    "description": "Ven y forma parte de esta gran experiencia",
+    "maxParticipants": 50,
+    "currentBookings": 0,
+    "status": "active",
+    "createdAt": "2026-03-20T23:02:54.200Z",
+    "highlights": [
+      "Angel de la Independencia"
+    ]
   }
 ]

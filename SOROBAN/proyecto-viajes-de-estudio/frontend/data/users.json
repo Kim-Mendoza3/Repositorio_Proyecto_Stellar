@@ -82,5 +82,47 @@
     "verified": true,
     "status": "active",
     "registrationDate": "2025-12-03T19:57:44.103Z"
+  },
+  {
+    "id": "user_1774040491519_s99v35",
+    "publicKey": "GDUTNYPTDQVPXRM3IH74Q3HDQGLQWBJMZCRDMJ5A3TXX5EEGOSDEX3SI",
+    "userType": "client",
+    "name": "Angel",
+    "email": "angel@gmail.com",
+    "phone": "9531329387",
+    "bankAccount": "GDUTNYPTDQVPXRM3IH74Q3HDQGLQWBJMZCRDMJ5A3TXX5EEGOSDEX3SI",
+    "school": "ITT",
+    "studentId": "22620006",
+    "verified": true,
+    "status": "active",
+    "registrationDate": "2026-03-20T21:01:31.519Z"
+  },
+  {
+    "id": "user_1774046309080_r8thr",
+    "publicKey": "GBK6TEW22FH2CYPLEALEQKKRCNI73VWGYRUGMUA5W5J74BXT5RCUUYKK",
+    "userType": "client",
+    "name": "angel",
+    "email": "angel@gmail.com",
+    "phone": "12345678",
+    "bankAccount": "GBK6TEW22FH2CYPLEALEQKKRCNI73VWGYRUGMUA5W5J74BXT5RCUUYKK",
+    "school": "ITT",
+    "studentId": "22620006",
+    "verified": true,
+    "status": "active",
+    "registrationDate": "2026-03-20T22:38:29.080Z"
+  },
+  {
+    "id": "user_1774047488221_y4mrt6",
+    "publicKey": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
+    "userType": "company",
+    "name": "Stellar",
+    "email": "stellar@gmail.com",
+    "phone": "12345678",
+    "companyName": "Stellar",
+    "businessLicense": "org",
+    "bankAccount": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
+    "verified": false,
+    "status": "active",
+    "registrationDate": "2026-03-20T22:58:08.221Z"
   }
 ]
