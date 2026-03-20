@@ -12,8 +12,7 @@
   # Build command: install with devDependencies, then build
   command = "npm install --legacy-peer-deps --include=dev && npm run build"
   
-  # Include Node modules in cache (faster builds)
-  ignore = "git diff --quiet HEAD^ HEAD -- SOROBAN/proyecto-viajes-de-estudio/frontend"
+  # Build always on production pushes to ensure UI changes are reflected.
 
 [build.environment]
   NODE_VERSION = "20.9.0"
