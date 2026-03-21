@@ -67,6 +67,12 @@ export default function RegisterNewPage() {
       return;
     }
 
+    const normalizedPhone = formData.phone.replace(/\D/g, '');
+    if (normalizedPhone && normalizedPhone.length !== 10) {
+      setFormError('El teléfono debe tener exactamente 10 dígitos');
+      return;
+    }
+
     // Avanzar a selección de tipo
     setStep('usertype');
   };
@@ -370,9 +376,15 @@ export default function RegisterNewPage() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => {
+                    const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setFormData({...formData, phone: digitsOnly});
+                  }}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  maxLength={10}
                   className="w-full px-5 py-3 bg-slate-700/40 border-2 border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:bg-slate-700/60 transition-all duration-300 font-medium"
-                  placeholder="+1234567890"
+                  placeholder="3001234567"
                 />
               </div>
 
