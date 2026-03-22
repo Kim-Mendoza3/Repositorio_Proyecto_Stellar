@@ -152,5 +152,25 @@
     "amount": 100,
     "status": "pending",
     "createdAt": "2025-12-05T21:04:43.511Z"
+  },
+  {
+    "id": "reservation_1774132821808",
+    "tripId": "trip_1774132707719",
+    "clientWallet": "GBK6TEW22FH2CYPLEALEQKKRCNI73VWGYRUGMUA5W5J74BXT5RCUUYKK",
+    "companyWallet": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
+    "amount": 50,
+    "txHash": "d3ebea5f2a18e17bb523b14266f963a3d3e10ad7e2dae48ec27ef96f2d733b37",
+    "status": "completed",
+    "createdAt": "2026-03-21T22:40:21.808Z"
+  },
+  {
+    "id": "reservation_1774148849903",
+    "tripId": "trip_1774047774181",
+    "clientWallet": "GBK6TEW22FH2CYPLEALEQKKRCNI73VWGYRUGMUA5W5J74BXT5RCUUYKK",
+    "companyWallet": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
+    "amount": 50,
+    "txHash": "stellar_1774148852156_j76q9b",
+    "status": "completed",
+    "createdAt": "2026-03-22T03:07:29.903Z"
   }
 ]

@@ -1,110 +1,23 @@
 [
   {
-    "id": "trip_1764370572783",
-    "companyWallet": "GCJZLPW32VHUS4YUL3GKUMRJTTDQKMX4U3TUV3FEZT55MQYRA2LTPAYG",
-    "name": "prueba",
-    "destination": "a tu corazon",
-    "duration": "4",
-    "priceXLM": 200,
-    "description": "",
-    "maxParticipants": 4,
-    "currentBookings": 5,
-    "status": "active",
-    "createdAt": "2025-11-28T22:56:12.824Z",
-    "highlights": []
-  },
-  {
-    "id": "trip_1764371203289",
-    "companyWallet": "GCJZLPW32VHUS4YUL3GKUMRJTTDQKMX4U3TUV3FEZT55MQYRA2LTPAYG",
-    "name": "bombo house",
-    "destination": "tu corazon",
-    "duration": "2",
-    "priceXLM": 100,
-    "description": "",
-    "maxParticipants": 4,
-    "currentBookings": 4,
-    "status": "active",
-    "createdAt": "2025-11-28T23:06:43.335Z",
-    "highlights": []
-  },
-  {
-    "id": "trip_1764622163372",
-    "companyWallet": "GCJZLPW32VHUS4YUL3GKUMRJTTDQKMX4U3TUV3FEZT55MQYRA2LTPAYG",
-    "name": "stellar",
-    "destination": "cancun",
-    "duration": "5",
-    "priceXLM": 300,
-    "description": "aksjdoas",
-    "maxParticipants": 5,
-    "currentBookings": 5,
-    "status": "active",
-    "createdAt": "2025-12-01T20:49:23.504Z",
-    "highlights": [
-      "kasjdikasj"
-    ]
-  },
-  {
-    "id": "trip_1764791904370",
-    "companyWallet": "GD56LBGC7WGXYKJZLWJUKJG6VOWDESIG2J24R52SNSVDPQSSLNREMJE6",
-    "name": "casa de tono",
-    "destination": "oaxaca",
-    "duration": "3",
-    "priceXLM": 300,
-    "description": "fefrgrg",
-    "maxParticipants": 4,
-    "currentBookings": 2,
-    "status": "active",
-    "createdAt": "2025-12-03T19:58:24.444Z",
-    "highlights": [
-      "regregre"
-    ]
-  },
-  {
-    "id": "trip_1764963875554",
-    "companyWallet": "GD56LBGC7WGXYKJZLWJUKJG6VOWDESIG2J24R52SNSVDPQSSLNREMJE6",
-    "name": "Trip USA",
-    "destination": "Estados Unidos",
-    "duration": "3",
-    "priceXLM": 30,
-    "description": "Conocer Disneyland",
-    "maxParticipants": 10,
-    "currentBookings": 0,
-    "status": "active",
-    "createdAt": "2025-12-05T19:44:35.605Z",
-    "highlights": [
-      "Disneyland"
-    ]
-  },
-  {
-    "id": "trip_1764968594664",
-    "companyWallet": "GD56LBGC7WGXYKJZLWJUKJG6VOWDESIG2J24R52SNSVDPQSSLNREMJE6",
-    "name": "Viaje a Tequila",
-    "destination": "Guadalajara",
-    "duration": "3",
-    "priceXLM": 100,
-    "description": "Visitar los campos de agave para aprender sobre todo el proceso de la elaboracion del Tequila",
-    "maxParticipants": 20,
-    "currentBookings": 1,
-    "status": "active",
-    "createdAt": "2025-12-05T21:03:14.707Z",
-    "highlights": [
-      "Tequila"
-    ]
-  },
-  {
-    "id": "trip_1774047774181",
+    "id": "trip_1774149022444",
     "companyWallet": "GAUCNXWJT4IOBMTMBDCLXZE7J2C4V5G64IW77SG5FV2MBMKVFS47ET55",
-    "name": "Hack Alebrije",
-    "destination": "CDMX",
-    "duration": "5",
-    "priceXLM": 500000,
-    "description": "Ven y forma parte de esta gran experiencia",
-    "maxParticipants": 50,
+    "companyName": "Stellar",
+    "targetSector": "SISTEMAS",
+    "termsAndConditions": "SI",
+    "maxApplications": 100,
+    "name": "HACK QUERETARO",
+    "destination": "Sector: SISTEMAS",
+    "duration": "10",
+    "priceXLM": 50,
+    "description": "SI",
+    "maxParticipants": 100,
     "currentBookings": 0,
     "status": "active",
-    "createdAt": "2026-03-20T23:02:54.200Z",
+    "createdAt": "2026-03-22T03:10:22.477Z",
     "highlights": [
-      "Angel de la Independencia"
+      "Sector objetivo: SISTEMAS",
+      "Postulacion sujeta a terminos y condiciones"
     ]
   }
 ]

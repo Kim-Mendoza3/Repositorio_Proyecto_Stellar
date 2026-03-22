@@ -1,22 +1,13 @@
-[package]
-name = "passkey-account"
-version = "0.1.0"
-edition = "2021"
-
-[lib]
-crate-type = ["cdylib"]
-
-[dependencies]
-soroban-sdk = "21.7.3"
-serde = { version = "1.0", default-features = false, features = ["derive"] }
-
-[dev-dependencies]
-soroban-sdk = { version = "21.7.3", features = ["testutils"] }
-
-[features]
-default = []
-loan = []  # Feature flag for the loan contract
-trip = []  # Feature flag for the trip (viajes) contract
+[workspace]
+members = [
+    "contracts/smarttrip-core",
+    "contracts/smarttrip-trip",
+    "contracts/smarttrip-badge",
+    "contracts/smarttrip-token",
+    "contracts/smarttrip-reputation",
+    "contracts/smarttrip-treasury",
+]
+resolver = "2"
 
 [profile.release]
 opt-level = "z"

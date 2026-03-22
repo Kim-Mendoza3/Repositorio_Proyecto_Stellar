@@ -6,11 +6,17 @@ import { useRouter } from 'next/navigation';
 import { useWallet } from '@/contexts/WalletContext';
 import { useUserRegistry } from '@/hooks/useUserRegistry';
 import { usePersistUserRegistry } from '@/hooks/usePersistUserRegistry';
-import { Building2, LogOut, Plus, DollarSign, Users, TrendingUp, Edit, Trash2, Sparkles, Lock, Globe, Zap } from 'lucide-react';
+import TripOfferForm, { TripOfferFormData } from '@/components/TripOfferForm';
+import { normalizeTripFormData, validateTripOfferData } from '@/lib/trip-validation';
+import { Building2, LogOut, Plus, Users, TrendingUp, Edit, Trash2, Sparkles, Lock, Globe, Zap, ClipboardList, CheckCircle2, XCircle } from 'lucide-react';
 
 interface TripOffer {
   id: string;
   companyWallet: string;
+  companyName?: string;
+  targetSector?: string;
+  termsAndConditions?: string;
+  maxApplications?: number;
   name: string;
   destination: string;
   duration: string;
@@ -23,6 +29,75 @@ interface TripOffer {
   highlights: string[];
 }
 
+interface OutstandingStudent {
+  id: string;
+  name: string;
+  career: string;
+  fundedProgram: string;
+  location: string;
+  performanceScore: number;
+  skills: string[];
+}
+
+interface SponsorshipApplication {
+  id: string;
+  tripId: string;
+  tripName: string;
+  destination: string;
+  companyWallet: string;
+  companyName: string;
+  studentWallet: string;
+  studentName: string;
+  studentEmail: string;
+  studentPhone?: string;
+  studentSchool?: string;
+  whyJoin: string;
+  whyInterested: string;
+  eventContribution: string;
+  futureContribution: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: string;
+}
+
+const outstandingStudentsMock: OutstandingStudent[] = [
+  {
+    id: 'stu-1',
+    name: 'Valeria Gómez',
+    career: 'Ing. Software',
+    fundedProgram: 'Hackathon IA aplicada en Monterrey',
+    location: 'México',
+    performanceScore: 96,
+    skills: ['React', 'Soroban', 'Product Thinking'],
+  },
+  {
+    id: 'stu-2',
+    name: 'Daniel Ríos',
+    career: 'Ciberseguridad',
+    fundedProgram: 'Bootcamp de Seguridad Cloud en Bogotá',
+    location: 'Colombia',
+    performanceScore: 92,
+    skills: ['Pentesting', 'AWS', 'Automatización'],
+  },
+  {
+    id: 'stu-3',
+    name: 'Lucía Herrera',
+    career: 'Ciencia de Datos',
+    fundedProgram: 'Summit de Analítica en Buenos Aires',
+    location: 'Argentina',
+    performanceScore: 95,
+    skills: ['Python', 'ML Ops', 'Storytelling'],
+  },
+  {
+    id: 'stu-4',
+    name: 'Emiliano Torres',
+    career: 'UX + Frontend',
+    fundedProgram: 'Hackathon de Producto Digital en CDMX',
+    location: 'México',
+    performanceScore: 90,
+    skills: ['UX Research', 'TypeScript', 'Design Systems'],
+  },
+];
+
 export default function CompanyDashboardPage() {
   // Sincronizar registry persistentemente
   usePersistUserRegistry();
@@ -33,17 +108,19 @@ export default function CompanyDashboardPage() {
 
   const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const [tripOffers, setTripOffers] = useState<TripOffer[]>([]);
+  const [applications, setApplications] = useState<SponsorshipApplication[]>([]);
+  const [updatingApplicationId, setUpdatingApplicationId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingTrip, setEditingTrip] = useState<TripOffer | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TripOfferFormData>({
     name: '',
-    destination: '',
+    targetSector: '',
+    maxApplications: '30',
     duration: '',
-    priceXLM: '',
     description: '',
-    maxParticipants: '',
-    highlights: '',
+    termsAndConditions: '',
+    status: 'active',
   });
 
   // Verificar si es empresa
@@ -57,8 +134,55 @@ export default function CompanyDashboardPage() {
     console.log('Empresa encontrada:', user.companyName, 'Wallet:', user.publicKey);
     setCurrentUser(user);
     loadTripOffersFromAPI(user.publicKey);
+    loadApplicationsFromAPI(user.publicKey);
     setIsInitialized(true);
   }, [router, getCurrentUser]);
+
+  const loadApplicationsFromAPI = async (walletKey?: string) => {
+    try {
+      const wallet = walletKey || currentUser?.publicKey || account?.publicKey;
+      if (!wallet) return;
+
+      const response = await fetch(`/api/sponsorship-applications?companyWallet=${encodeURIComponent(wallet)}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setApplications(data.applications || []);
+      }
+    } catch (error) {
+      console.error('Error cargando solicitudes de patrocinio:', error);
+    }
+  };
+
+  const handleApplicationDecision = async (applicationId: string, status: 'accepted' | 'rejected') => {
+    const wallet = currentUser?.publicKey || account?.publicKey;
+    if (!wallet) return;
+
+    try {
+      setUpdatingApplicationId(applicationId);
+
+      const response = await fetch('/api/sponsorship-applications', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          applicationId,
+          companyWallet: wallet,
+          status,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'No se pudo actualizar la solicitud');
+      }
+
+      await loadApplicationsFromAPI(wallet);
+    } catch (error: any) {
+      alert(error?.message || 'Error al procesar la solicitud.');
+    } finally {
+      setUpdatingApplicationId(null);
+    }
+  };
 
   const loadTripOffers = (walletKey?: string) => {
     try {
@@ -85,12 +209,12 @@ export default function CompanyDashboardPage() {
     setEditingTrip(null);
     setFormData({
       name: '',
-      destination: '',
+      targetSector: '',
+      maxApplications: '30',
       duration: '',
-      priceXLM: '',
       description: '',
-      maxParticipants: '',
-      highlights: '',
+      termsAndConditions: '',
+      status: 'active',
     });
     setShowModal(true);
   };
@@ -99,12 +223,12 @@ export default function CompanyDashboardPage() {
     setEditingTrip(trip);
     setFormData({
       name: trip.name,
-      destination: trip.destination,
+      targetSector: trip.targetSector || '',
+      maxApplications: String(trip.maxApplications ?? trip.maxParticipants ?? 30),
       duration: trip.duration,
-      priceXLM: trip.priceXLM.toString(),
       description: trip.description,
-      maxParticipants: trip.maxParticipants.toString(),
-      highlights: trip.highlights.join('\n'),
+      termsAndConditions: trip.termsAndConditions || '',
+      status: trip.status,
     });
     setShowModal(true);
   };
@@ -112,14 +236,17 @@ export default function CompanyDashboardPage() {
   const handleSaveTrip = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.destination ||
-      !formData.duration ||
-      !formData.priceXLM ||
-      !formData.maxParticipants
-    ) {
-      alert('Por favor completa todos los campos requeridos');
+    const normalized = normalizeTripFormData({
+      name: formData.name,
+      targetSector: formData.targetSector,
+      maxApplications: formData.maxApplications,
+      duration: formData.duration,
+      description: formData.description,
+      termsAndConditions: formData.termsAndConditions,
+    });
+    const errors = validateTripOfferData(normalized);
+    if (errors.length > 0) {
+      alert(errors[0]);
       return;
     }
 
@@ -134,19 +261,20 @@ export default function CompanyDashboardPage() {
     const trip: TripOffer = {
       id: editingTrip?.id || `trip_${Date.now()}`,
       companyWallet: walletKey,
-      name: formData.name,
-      destination: formData.destination,
-      duration: formData.duration,
-      priceXLM: Number.parseFloat(formData.priceXLM),
-      description: formData.description,
-      maxParticipants: Number.parseInt(formData.maxParticipants, 10),
+      companyName: currentUser?.companyName || editingTrip?.companyName || 'Empresa asociada',
+      targetSector: normalized.targetSector,
+      termsAndConditions: normalized.termsAndConditions,
+      maxApplications: normalized.maxApplications,
+      name: normalized.name,
+      destination: normalized.destination,
+      duration: normalized.duration,
+      priceXLM: normalized.priceXLM,
+      description: normalized.description,
+      maxParticipants: normalized.maxApplications,
       currentBookings: editingTrip?.currentBookings || 0,
-      status: 'active',
+      status: formData.status || 'active',
       createdAt: editingTrip?.createdAt || new Date().toISOString(),
-      highlights: formData.highlights
-        .split('\n')
-        .filter(h => h.trim())
-        .map(h => h.trim()),
+      highlights: normalized.highlights,
     };
 
     try {
@@ -285,9 +413,9 @@ export default function CompanyDashboardPage() {
     );
   }
 
-  const totalEarnings = tripOffers.reduce((sum, trip) => sum + trip.priceXLM * trip.currentBookings, 0);
   const totalBookings = tripOffers.reduce((sum, trip) => sum + trip.currentBookings, 0);
   const activeTrips = tripOffers.filter(t => t.status === 'active').length;
+  const pendingApplications = applications.filter((application) => application.status === 'pending').length;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_#1e1b4b_0%,_#0f172a_45%,_#020617_100%)] p-6 text-white">
@@ -335,8 +463,9 @@ export default function CompanyDashboardPage() {
           </button>
         </div>
 
+
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
             <div className="flex items-center justify-between">
               <div>
@@ -358,16 +487,6 @@ export default function CompanyDashboardPage() {
           </div>
 
           <div className="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-400 text-sm">Ingresos Estimados</p>
-                <p className="text-3xl font-bold text-emerald-300 mt-2">{totalEarnings.toFixed(2)} XLM</p>
-              </div>
-              <DollarSign className="w-8 h-8 text-emerald-300" />
-            </div>
-          </div>
-
-          <div className="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
             <div>
               <p className="text-gray-400 text-sm mb-2">Tu Wallet</p>
               <p className="text-sm text-cyan-300 font-mono break-all">{currentUser.publicKey.substring(0, 16)}...</p>
@@ -375,15 +494,150 @@ export default function CompanyDashboardPage() {
           </div>
         </div>
 
-        {/* Create Trip Button */}
-        <div className="mb-8">
-          <button
-            onClick={handleCreateTrip}
-            className="btn-gloss btn-cyan text-slate-950 font-bold py-3 px-6 rounded-lg transition-all shadow-lg inline-flex items-center gap-2"
-          >
-            <Plus className="w-5 h-5" />
-            Nueva Oferta de Viaje
-          </button>
+        <div className="mb-8 bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
+          <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
+            <div>
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-cyan-300" />
+                Solicitudes de patrocinio
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">Postulantes que quieren unirse a tus programas de empresa.</p>
+            </div>
+            <span className="text-sm px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-400/25">
+              Pendientes: {pendingApplications}
+            </span>
+          </div>
+
+          {applications.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-cyan-400/25 bg-slate-950/40 p-5 text-sm text-gray-400">
+              Aún no hay solicitudes de patrocinio para tus ofertas.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {applications.map((application) => {
+                const isPending = application.status === 'pending';
+                let statusBadgeClass = 'bg-amber-500/20 text-amber-300';
+                let statusBadgeLabel = 'Pendiente';
+
+                if (application.status === 'accepted') {
+                  statusBadgeClass = 'bg-emerald-500/20 text-emerald-300';
+                  statusBadgeLabel = 'Aceptada';
+                } else if (application.status === 'rejected') {
+                  statusBadgeClass = 'bg-rose-500/20 text-rose-300';
+                  statusBadgeLabel = 'Rechazada';
+                }
+
+                return (
+                  <article key={application.id} className="rounded-xl border border-cyan-400/20 bg-slate-950/55 p-4">
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-white">{application.studentName}</h3>
+                        <p className="text-sm text-cyan-200">{application.studentEmail}</p>
+                        <p className="text-xs text-gray-400 mt-1">Wallet: {application.studentWallet.substring(0, 16)}...</p>
+                        {application.studentSchool && (
+                          <p className="text-xs text-gray-400 mt-1">Escuela: {application.studentSchool}</p>
+                        )}
+                      </div>
+                      <div className="text-left md:text-right">
+                        <p className="text-sm text-white font-semibold">{application.tripName}</p>
+                        <p className="text-xs text-gray-400">{application.destination}</p>
+                        <span className={`inline-flex mt-2 items-center px-3 py-1 rounded-full text-xs font-bold ${statusBadgeClass}`}>
+                          {statusBadgeLabel}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="rounded-lg bg-slate-900/70 border border-slate-700 p-3">
+                        <p className="text-cyan-200 font-semibold mb-1">Por qué quiere unirse</p>
+                        <p className="text-gray-300">{application.whyJoin}</p>
+                      </div>
+                      <div className="rounded-lg bg-slate-900/70 border border-slate-700 p-3">
+                        <p className="text-cyan-200 font-semibold mb-1">Interés en el evento</p>
+                        <p className="text-gray-300">{application.whyInterested}</p>
+                      </div>
+                      <div className="rounded-lg bg-slate-900/70 border border-slate-700 p-3">
+                        <p className="text-cyan-200 font-semibold mb-1">Aporte durante el evento</p>
+                        <p className="text-gray-300">{application.eventContribution}</p>
+                      </div>
+                      <div className="rounded-lg bg-slate-900/70 border border-slate-700 p-3">
+                        <p className="text-cyan-200 font-semibold mb-1">Aporte futuro si es reclutado</p>
+                        <p className="text-gray-300">{application.futureContribution}</p>
+                      </div>
+                    </div>
+
+                    {isPending && (
+                      <div className="flex flex-wrap gap-3 mt-4">
+                        <button
+                          onClick={() => handleApplicationDecision(application.id, 'accepted')}
+                          disabled={updatingApplicationId === application.id}
+                          className="btn-gloss inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white font-bold py-2 px-4 rounded-lg transition-all disabled:opacity-60"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Aceptar solicitud
+                        </button>
+                        <button
+                          onClick={() => handleApplicationDecision(application.id, 'rejected')}
+                          disabled={updatingApplicationId === application.id}
+                          className="btn-gloss inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 hover:brightness-110 text-white font-bold py-2 px-4 rounded-lg transition-all disabled:opacity-60"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Rechazar solicitud
+                        </button>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="mb-8 bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-white">Estudiantes destacados disponibles para tu empresa</h2>
+              <p className="text-gray-400 text-sm">Talentos destacados que siguen disponibles para ser reclutados por tu empresa.</p>
+            </div>
+            <button
+              onClick={handleCreateTrip}
+              className="btn-gloss btn-cyan text-slate-950 font-bold py-3 px-6 rounded-lg transition-all shadow-lg inline-flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Nueva Oferta
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {outstandingStudentsMock.map((student) => (
+              <article
+                key={student.id}
+                className="rounded-xl border border-cyan-400/20 bg-slate-950/50 p-4 hover:border-cyan-300/40 transition-all"
+              >
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-white">{student.name}</h3>
+                    <p className="text-sm text-cyan-200">{student.career} • {student.location}</p>
+                  </div>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">
+                    Score {student.performanceScore}/100
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-300 mb-3">
+                  Programa financiado: <span className="text-white font-semibold">{student.fundedProgram}</span>
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {student.skills.map((skill) => (
+                    <span key={skill} className="text-xs px-2 py-1 rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-400/25">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
 
         {/* Trip Offers Table */}
@@ -406,10 +660,12 @@ export default function CompanyDashboardPage() {
                 key={trip.id}
                 className="bg-slate-900/70 backdrop-blur rounded-2xl p-6 border border-cyan-400/25 hover:border-cyan-300/55 transition-all"
               >
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                   <div className="md:col-span-2">
                     <h3 className="text-lg font-bold text-white">{trip.name}</h3>
                     <p className="text-gray-400 text-sm">{trip.destination}</p>
+                    <p className="text-xs text-gray-300 mt-1">Maximo de postulaciones: {trip.maxApplications ?? trip.maxParticipants}</p>
+                    <p className="text-xs text-cyan-200 mt-1">Empresa visible para estudiantes: {trip.companyName || currentUser.companyName}</p>
                     <div className="mt-2 space-y-1">
                       {trip.highlights.slice(0, 2).map((h) => (
                         <p key={h} className="text-gray-400 text-xs">✓ {h}</p>
@@ -421,9 +677,8 @@ export default function CompanyDashboardPage() {
                   </div>
 
                   <div className="text-center">
-                    <p className="text-gray-400 text-xs mb-1">Precio</p>
-                    <p className="text-2xl font-bold text-cyan-300">{trip.priceXLM} XLM</p>
-                    <p className="text-gray-400 text-xs mt-1">{trip.duration}</p>
+                    <p className="text-gray-400 text-xs mb-1">Duracion</p>
+                    <p className="text-2xl font-bold text-cyan-300">{trip.duration}</p>
                   </div>
 
                   <div className="text-center">
@@ -463,125 +718,14 @@ export default function CompanyDashboardPage() {
               {editingTrip ? 'Editar Oferta' : 'Nueva Oferta de Viaje'}
             </h2>
 
-            <form onSubmit={handleSaveTrip} className="space-y-4">
-              <div>
-                <label htmlFor="trip-name" className="block text-white font-semibold mb-2">Nombre del Viaje *</label>
-                <input
-                  id="trip-name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="ej. Viaje a CDMX"
-                  className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="trip-destination" className="block text-white font-semibold mb-2">Destino *</label>
-                <input
-                  id="trip-destination"
-                  type="text"
-                  value={formData.destination}
-                  onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                  placeholder="ej. Ciudad de México"
-                  className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="trip-duration" className="block text-white font-semibold mb-2">Duración *</label>
-                  <input
-                    id="trip-duration"
-                    type="text"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    placeholder="ej. 5 días"
-                    className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="trip-price" className="block text-white font-semibold mb-2">Precio (XLM) *</label>
-                  <input
-                    id="trip-price"
-                    type="number"
-                    value={formData.priceXLM}
-                    onChange={(e) => setFormData({ ...formData, priceXLM: e.target.value })}
-                    placeholder="50"
-                    step="0.01"
-                    className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="trip-max-participants" className="block text-white font-semibold mb-2">Max. Participantes *</label>
-                  <input
-                    id="trip-max-participants"
-                    type="number"
-                    value={formData.maxParticipants}
-                    onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
-                    placeholder="30"
-                    className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="trip-status" className="block text-white font-semibold mb-2">Estado</label>
-                  <select id="trip-status" className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none">
-                    <option>Activo</option>
-                    <option>Inactivo</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="trip-description" className="block text-white font-semibold mb-2">Descripción</label>
-                <textarea
-                  id="trip-description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe el viaje..."
-                  rows={3}
-                  className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="trip-highlights" className="block text-white font-semibold mb-2">Puntos destacados (uno por línea)</label>
-                <textarea
-                  id="trip-highlights"
-                  value={formData.highlights}
-                  onChange={(e) => setFormData({ ...formData, highlights: e.target.value })}
-                  placeholder="Museo de Antropología&#10;Pirámides de Teotihuacán&#10;Xochimilco"
-                  rows={4}
-                  className="w-full px-4 py-2 bg-slate-950/70 border border-slate-700 rounded-lg text-white focus:border-cyan-400 focus:outline-none font-mono text-sm"
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all"
-                >
-                  {editingTrip ? 'Actualizar' : 'Crear'} Oferta
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 btn-gloss bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-all"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
+            <TripOfferForm
+              formData={formData}
+              onChange={setFormData}
+              onSubmit={handleSaveTrip}
+              submitLabel={`${editingTrip ? 'Actualizar' : 'Crear'} Oferta`}
+              cancelLabel="Cancelar"
+              onCancel={() => setShowModal(false)}
+            />
           </div>
         </div>
       )}

@@ -7,7 +7,12 @@ import { useWallet } from '@/contexts/WalletContext';
 import { useTripOffers } from '@/hooks/useTripOffers';
 import { LogOut, Wallet, Copy, Check, X, Sparkles, Lock, Globe, Zap } from 'lucide-react';
 import TransactionHistory from '@/components/TransactionHistory';
-import ReservationModal from '@/components/ReservationModal';
+
+interface SponsorshipApplication {
+  id: string;
+  tripId: string;
+  status: 'pending' | 'accepted' | 'rejected';
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -15,23 +20,56 @@ export default function DashboardPage() {
   const { trips, loading, loadAllTrips } = useTripOffers();
   const [copied, setCopied] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [showTransactionHistory, setShowTransactionHistory] = useState(false);
-  const [selectedTripForReservation, setSelectedTripForReservation] = useState<any>(null);
-  const [showReservationModal, setShowReservationModal] = useState(false);
+  const [studentApplications, setStudentApplications] = useState<SponsorshipApplication[]>([]);
+  const [selectedTripForApplication, setSelectedTripForApplication] = useState<any>(null);
+  const [showSponsorshipModal, setShowSponsorshipModal] = useState(false);
+  const [submittingApplication, setSubmittingApplication] = useState(false);
+  const [applicationForm, setApplicationForm] = useState({
+    whyJoin: '',
+    whyInterested: '',
+    eventContribution: '',
+    futureContribution: '',
+    acceptedTerms: false,
+  });
+
+  const loadStudentApplications = async (studentWallet: string) => {
+    try {
+      const response = await fetch(`/api/sponsorship-applications?studentWallet=${encodeURIComponent(studentWallet)}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setStudentApplications(data.applications || []);
+      }
+    } catch (error) {
+      console.error('Error cargando postulaciones del estudiante:', error);
+    }
+  };
 
   useEffect(() => {
     setIsInitialized(true);
     // Verificar si hay sesión activa
     const walletAddress = localStorage.getItem('walletAddress');
     const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const currentUserRaw = localStorage.getItem('current_user');
+    if (currentUserRaw) {
+      setCurrentUser(JSON.parse(currentUserRaw));
+    }
     
     if (!walletAddress || !isAuthenticated) {
       router.push('/login');
     }
 
-    // Cargar viajes desde Stellar
+    // Cargar ofertas
     loadAllTrips();
   }, [router]);
+
+  useEffect(() => {
+    if (account?.publicKey) {
+      loadStudentApplications(account.publicKey);
+    }
+  }, [account?.publicKey]);
 
   if (!isInitialized || !account) {
     return (
@@ -58,6 +96,185 @@ export default function DashboardPage() {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('loginTime');
     router.push('/login');
+  };
+
+  const getApplicationForTrip = (tripId: string) => {
+    return studentApplications.find((application) => application.tripId === tripId);
+  };
+
+  const openSponsorshipModal = (trip: any) => {
+    setSelectedTripForApplication(trip);
+    setApplicationForm({
+      whyJoin: '',
+      whyInterested: '',
+      eventContribution: '',
+      futureContribution: '',
+      acceptedTerms: false,
+    });
+    setShowSponsorshipModal(true);
+  };
+
+  const handleSubmitSponsorshipApplication = async () => {
+    if (!account?.publicKey || !selectedTripForApplication) return;
+
+    const fields = [
+      applicationForm.whyJoin,
+      applicationForm.whyInterested,
+      applicationForm.eventContribution,
+      applicationForm.futureContribution,
+    ];
+
+    if (fields.some((value) => value.trim().length < 10)) {
+      alert('Completa todos los campos con al menos 10 caracteres.');
+      return;
+    }
+
+    if (!applicationForm.acceptedTerms) {
+      alert('Debes aceptar los términos y condiciones para continuar.');
+      return;
+    }
+
+    setSubmittingApplication(true);
+    try {
+      const response = await fetch('/api/sponsorship-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tripId: selectedTripForApplication.id,
+          tripName: selectedTripForApplication.name || selectedTripForApplication.destination,
+          destination: selectedTripForApplication.destination,
+          companyWallet: selectedTripForApplication.companyWallet,
+          companyName: selectedTripForApplication.companyName || 'Empresa verificada',
+          studentWallet: account.publicKey,
+          studentName: currentUser?.name || 'Estudiante',
+          studentEmail: currentUser?.email || 'Sin correo',
+          studentPhone: currentUser?.phone || '',
+          studentSchool: currentUser?.school || '',
+          whyJoin: applicationForm.whyJoin.trim(),
+          whyInterested: applicationForm.whyInterested.trim(),
+          eventContribution: applicationForm.eventContribution.trim(),
+          futureContribution: applicationForm.futureContribution.trim(),
+          acceptedTerms: true,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'No se pudo enviar la postulación');
+      }
+
+      await loadStudentApplications(account.publicKey);
+      setShowSponsorshipModal(false);
+      setSelectedTripForApplication(null);
+      alert('Tu solicitud fue enviada exitosamente.');
+    } catch (error: any) {
+      alert(error?.message || 'Error enviando la solicitud.');
+    } finally {
+      setSubmittingApplication(false);
+    }
+  };
+
+  const renderTripsSection = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center gap-2 text-gray-400 py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-300"></div>
+          Cargando ofertas...
+        </div>
+      );
+    }
+
+    if (trips.length === 0) {
+      return (
+        <div className="bg-slate-900/70 rounded-2xl p-12 text-center border border-cyan-400/25">
+          <p className="text-gray-400 mb-4">No hay ofertas disponibles en este momento</p>
+          <button
+            onClick={() => router.push('/available-trips')}
+            className="btn-gloss btn-cyan text-slate-950 font-bold py-2 px-6 rounded-lg transition-all"
+          >
+            Ver todas las ofertas
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {trips.slice(0, 3).map((trip, idx) => {
+          const existingApplication = getApplicationForTrip(trip.id);
+          const isPending = existingApplication?.status === 'pending';
+          const isAccepted = existingApplication?.status === 'accepted';
+          let applicationStatusClass = 'text-rose-300';
+          let applicationStatusLabel = 'Rechazado';
+          let applicationButtonLabel = 'Unirme a patrocinio';
+
+          if (isAccepted) {
+            applicationStatusClass = 'text-emerald-300';
+            applicationStatusLabel = 'Aceptado';
+            applicationButtonLabel = 'Aceptado';
+          } else if (isPending) {
+            applicationStatusClass = 'text-amber-300';
+            applicationStatusLabel = 'En revision';
+            applicationButtonLabel = 'Postulacion enviada';
+          }
+
+          const colors = [
+            {
+              topGradient: 'from-cyan-500/20 to-sky-500/20',
+              chipClass: 'bg-cyan-500/20 text-cyan-300',
+              btnClass: 'btn-cyan text-slate-950',
+            },
+            {
+              topGradient: 'from-indigo-500/20 to-blue-500/20',
+              chipClass: 'bg-indigo-500/20 text-indigo-300',
+              btnClass: 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white',
+            },
+            {
+              topGradient: 'from-amber-500/20 to-orange-500/20',
+              chipClass: 'bg-amber-500/20 text-amber-300',
+              btnClass: 'btn-amber text-slate-900',
+            },
+          ];
+          const color = colors[idx % 3];
+
+          return (
+            <div key={trip.id} className="bg-slate-900/70 rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:border-cyan-300/40 transition-all duration-300 hover:-translate-y-1">
+              <div className={`h-40 bg-gradient-to-br ${color.topGradient}`}></div>
+              <div className="p-6">
+                <p className="text-xs text-gray-400 mb-2">
+                  Empresa: <span className="text-cyan-200 font-semibold">{trip.companyName || 'Empresa verificada'}</span>
+                </p>
+                <h3 className="text-lg font-bold text-white mb-2">{trip.name || trip.destination}</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  {trip.description || 'Descubre este increíble destino de estudio'}
+                </p>
+                {existingApplication && (
+                  <p className={`text-xs mb-3 font-semibold ${applicationStatusClass}`}>
+                    Estado de postulacion: {applicationStatusLabel}
+                  </p>
+                )}
+                <div className="flex items-center justify-end mb-4">
+                  <span className={`text-xs px-3 py-1 rounded-full ${color.chipClass}`}>
+                    {trip.duration || 3} días
+                  </span>
+                </div>
+                <button
+                  onClick={() => openSponsorshipModal(trip)}
+                  disabled={isPending || isAccepted}
+                  className={`w-full btn-gloss font-bold py-2 px-4 rounded-lg transition-all ${
+                    isPending || isAccepted
+                      ? 'bg-slate-700 text-slate-300 cursor-not-allowed'
+                      : `${color.btnClass} hover:scale-[1.02]`
+                  }`}
+                >
+                  {applicationButtonLabel}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -115,11 +332,12 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {/* Address */}
               <div>
-                <label className="text-sm font-semibold text-gray-400 mb-2 block">
+                <label htmlFor="wallet-address" className="text-sm font-semibold text-gray-400 mb-2 block">
                   Dirección de Wallet
                 </label>
                 <div className="flex items-center gap-2">
                   <input
+                    id="wallet-address"
                     type="text"
                     readOnly
                     value={account.publicKey}
@@ -144,21 +362,13 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Balance */}
+              {/* Estado de cuenta */}
               <div>
-                <label className="text-sm font-semibold text-gray-400 mb-2 block">
-                  Saldo Disponible
-                </label>
+                <p className="text-sm font-semibold text-gray-400 mb-2 block">
+                  Estado de cuenta
+                </p>
                 <div className="bg-slate-900 border border-slate-600 rounded-lg px-4 py-3">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-cyan-300">
-                      {account.balance.toFixed(2)}
-                    </span>
-                    <span className="text-xl text-gray-400">XLM</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Red: Stellar Testnet
-                  </p>
+                  <p className="text-cyan-200 text-sm">Perfil listo para postularse a ofertas de patrocinio.</p>
                 </div>
               </div>
 
@@ -175,40 +385,29 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div className="space-y-4">
-            {/* Available Trips */}
             <div className="bg-slate-900/70 rounded-2xl p-6 border border-cyan-400/30 shadow-xl shadow-cyan-500/10">
-              <h3 className="text-lg font-bold text-white mb-4">Viajes disponibles</h3>
+              <h3 className="text-lg font-bold text-white mb-4">Ofertas de empresas</h3>
               <p className="text-gray-300 text-sm mb-4">
-                Explora viajes de estudio ofrecidos por empresas. Reserva y paga con tu wallet.
+                Revisa hackatones, programas académicos y nuevas oportunidades publicadas por empresas.
               </p>
-              <button 
+              <button
                 onClick={() => router.push('/available-trips')}
-                className="w-full btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all shadow-lg hover:scale-[1.02]">
-                Ver Todos los Viajes
+                className="w-full btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all shadow-lg hover:scale-[1.02]"
+              >
+                Ver ofertas disponibles
               </button>
             </div>
 
-            {/* Transactions History */}
             <div className="bg-slate-900/70 rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
               <h3 className="text-lg font-bold text-white mb-4">Transacciones</h3>
               <p className="text-gray-400 text-sm mb-4">
-                Visualiza tu historial de pagos y transacciones.
+                Visualiza tu historial de pagos y reservas completadas.
               </p>
-              <button 
+              <button
                 onClick={() => setShowTransactionHistory(true)}
-                className="w-full btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all hover:scale-[1.02]">
-                Historial
-              </button>
-            </div>
-
-            {/* Settings */}
-            <div className="bg-slate-900/70 rounded-2xl p-6 border border-cyan-400/25 shadow-xl shadow-cyan-500/10">
-              <h3 className="text-lg font-bold text-white mb-4">Configuración</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                Administra tu perfil y preferencias.
-              </p>
-              <button className="w-full btn-gloss bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-all">
-                Ajustes
+                className="w-full btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all hover:scale-[1.02]"
+              >
+                Ver historial
               </button>
             </div>
           </div>
@@ -216,74 +415,8 @@ export default function DashboardPage() {
 
         {/* Travel Packages Section */}
         <div className="mt-8">
-          <h2 className="text-2xl font-bold text-white mb-6">Paquetes Destacados</h2>
-          {loading ? (
-            <div className="flex items-center justify-center gap-2 text-gray-400 py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-300"></div>
-              Cargando viajes...
-            </div>
-          ) : trips.length === 0 ? (
-            <div className="bg-slate-900/70 rounded-2xl p-12 text-center border border-cyan-400/25">
-              <p className="text-gray-400 mb-4">No hay viajes disponibles en este momento</p>
-              <button 
-                onClick={() => router.push('/available-trips')}
-                className="btn-gloss btn-cyan text-slate-950 font-bold py-2 px-6 rounded-lg transition-all">
-                Ver todos los viajes
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trips.slice(0, 3).map((trip, idx) => {
-                const colors = [
-                  {
-                    topGradient: 'from-cyan-500/20 to-sky-500/20',
-                    chipClass: 'bg-cyan-500/20 text-cyan-300',
-                    priceClass: 'text-cyan-300',
-                    btnClass: 'btn-cyan text-slate-950',
-                  },
-                  {
-                    topGradient: 'from-indigo-500/20 to-blue-500/20',
-                    chipClass: 'bg-indigo-500/20 text-indigo-300',
-                    priceClass: 'text-indigo-300',
-                    btnClass: 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white',
-                  },
-                  {
-                    topGradient: 'from-amber-500/20 to-orange-500/20',
-                    chipClass: 'bg-amber-500/20 text-amber-300',
-                    priceClass: 'text-amber-300',
-                    btnClass: 'btn-amber text-slate-900',
-                  },
-                ];
-                const color = colors[idx % 3];
-
-                return (
-                  <div key={trip.id} className="bg-slate-900/70 rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:border-cyan-300/40 transition-all duration-300 hover:-translate-y-1">
-                    <div className={`h-40 bg-gradient-to-br ${color.topGradient}`}></div>
-                    <div className="p-6">
-                      <h3 className="text-lg font-bold text-white mb-2">{trip.destination}</h3>
-                      <p className="text-gray-400 text-sm mb-4">
-                        {trip.description || 'Descubre este increíble destino de estudio'}
-                      </p>
-                      <div className="flex items-center justify-between mb-4">
-                        <span className={`text-2xl font-bold ${color.priceClass}`}>{trip.priceXLM} XLM</span>
-                        <span className={`text-xs px-3 py-1 rounded-full ${color.chipClass}`}>
-                          {trip.duration || 3} días
-                        </span>
-                      </div>
-                      <button 
-                        onClick={() => {
-                          setSelectedTripForReservation(trip);
-                          setShowReservationModal(true);
-                        }}
-                        className={`w-full btn-gloss ${color.btnClass} font-bold py-2 px-4 rounded-lg transition-all hover:scale-[1.02]`}>
-                        Reservar
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <h2 className="text-2xl font-bold text-white mb-6">Ofertas recientes de empresas</h2>
+          {renderTripsSection()}
         </div>
       </div>
 
@@ -307,24 +440,100 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Reservation Modal */}
-      {showReservationModal && selectedTripForReservation && (
+      {/* Sponsorship Application Modal */}
+      {showSponsorshipModal && selectedTripForApplication && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-slate-900 rounded-2xl border border-cyan-400/25 max-w-2xl w-full max-h-[80vh] overflow-auto">
             <div className="flex items-center justify-between p-6 border-b border-slate-700 sticky top-0 bg-slate-900">
-              <h2 className="text-xl font-bold text-white">Reservar: {selectedTripForReservation.destination}</h2>
+              <h2 className="text-xl font-bold text-white">Solicitud de Patrocinio: {selectedTripForApplication.name || selectedTripForApplication.destination}</h2>
               <button
                 onClick={() => {
-                  setShowReservationModal(false);
-                  setSelectedTripForReservation(null);
+                  setShowSponsorshipModal(false);
+                  setSelectedTripForApplication(null);
                 }}
                 className="text-gray-400 hover:text-white transition-all"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="p-6">
-              <ReservationModal trip={selectedTripForReservation} onClose={() => setShowReservationModal(false)} />
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-gray-300">
+                Completa esta postulación explicando por qué te interesa participar y qué valor aportarías a la empresa.
+              </p>
+
+              <div>
+                <label htmlFor="why-join" className="block text-sm text-gray-300 mb-2">¿Por qué te quieres unir?</label>
+                <textarea
+                  id="why-join"
+                  value={applicationForm.whyJoin}
+                  onChange={(e) => setApplicationForm((prev) => ({ ...prev, whyJoin: e.target.value }))}
+                  rows={3}
+                  className="w-full bg-slate-950/60 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-400 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="why-interested" className="block text-sm text-gray-300 mb-2">¿Por qué estás interesado en este evento?</label>
+                <textarea
+                  id="why-interested"
+                  value={applicationForm.whyInterested}
+                  onChange={(e) => setApplicationForm((prev) => ({ ...prev, whyInterested: e.target.value }))}
+                  rows={3}
+                  className="w-full bg-slate-950/60 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-400 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="event-contribution" className="block text-sm text-gray-300 mb-2">¿Qué estás dispuesto a aportar a la empresa durante el evento?</label>
+                <textarea
+                  id="event-contribution"
+                  value={applicationForm.eventContribution}
+                  onChange={(e) => setApplicationForm((prev) => ({ ...prev, eventContribution: e.target.value }))}
+                  rows={3}
+                  className="w-full bg-slate-950/60 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-400 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="future-contribution" className="block text-sm text-gray-300 mb-2">Si la empresa te recluta en el futuro, ¿qué aportarías?</label>
+                <textarea
+                  id="future-contribution"
+                  value={applicationForm.futureContribution}
+                  onChange={(e) => setApplicationForm((prev) => ({ ...prev, futureContribution: e.target.value }))}
+                  rows={3}
+                  className="w-full bg-slate-950/60 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-400 focus:outline-none"
+                />
+              </div>
+
+              <label className="flex items-start gap-2 text-sm text-gray-300">
+                <input
+                  type="checkbox"
+                  checked={applicationForm.acceptedTerms}
+                  onChange={(e) => setApplicationForm((prev) => ({ ...prev, acceptedTerms: e.target.checked }))}
+                  className="mt-1"
+                />{' '}
+                Acepto terminos y condiciones del patrocinio, y me comprometo a mantener un comportamiento profesional durante el evento.
+              </label>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    setShowSponsorshipModal(false);
+                    setSelectedTripForApplication(null);
+                  }}
+                  className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg transition-all"
+                  disabled={submittingApplication}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSubmitSponsorshipApplication}
+                  className="w-full btn-gloss btn-cyan text-slate-950 font-bold py-2 px-4 rounded-lg transition-all disabled:opacity-60"
+                  disabled={submittingApplication}
+                >
+                  {submittingApplication ? 'Enviando...' : 'Enviar solicitud'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
