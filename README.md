@@ -394,3 +394,390 @@ MIT License
 Copyright (c) 2026 EduTravel Chain Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
+
+# 🌐 Colaboración en el Ecosistema Stellar
+
+Durante el desarrollo de **SmartTrip**, el equipo participó activamente en espacios comunitarios del ecosistema Stellar para resolver dudas técnicas relacionadas con Soroban, contratos inteligentes y despliegue en Testnet.
+
+## Participación Comunitaria
+
+### Discord — Stellar Developers Community
+
+Temas consultados:
+
+- Configuración inicial de Soroban CLI.
+- Manejo de almacenamiento en Smart Contracts.
+- Validaciones de autorización (`require_auth`).
+- Estrategias para despliegue en Stellar Testnet.
+
+### Ejemplo de interacción realizada
+
+**Pregunta publicada:**
+
+> "We are developing a decentralized educational travel platform using Soroban smart contracts. What is the recommended approach for managing sponsorship balances while minimizing storage costs?"
+
+**Respuesta obtenida de la comunidad:**
+
+Se recomendó utilizar estructuras eficientes de almacenamiento (`Map`) y separar metadata del estado financiero del contrato.
+
+---
+
+### GitHub Discussions / Comunidad Técnica
+
+Se participó consultando sobre:
+
+- buenas prácticas en Rust para Soroban.
+- optimización de almacenamiento.
+- testing de contratos inteligentes.
+
+**Ejemplo de contribución realizada:**
+
+> "Our team implemented a sponsorship-based educational funding contract and discovered that balance validation using `unwrap_or(0)` simplified edge-case handling."
+
+---
+
+
+# 📋 Gestión del Proyecto — eduScrum
+
+Proyecto desarrollado utilizando metodología **eduScrum**.
+
+El trabajo se dividió en sprints incrementales para mantener trazabilidad, colaboración y seguimiento continuo.
+
+---
+
+# 👥 Equipo de Trabajo
+
+| Integrante | Rol |
+|------------|------|
+| Kimberly Mendoza Hernandez | Smart Contract Developer |
+| Arcangel Gonzalez Cruz | Frontend Developer |
+| Angel Antonio Lopez Perez | Backend / Integration Developer |
+
+---
+
+# 📌 Product Backlog
+
+| ID | Historia de Usuario | Prioridad |
+|----|--------------------|------------|
+| US01 | Como estudiante quiero crear una campaña de viaje para solicitar financiamiento. | Alta |
+| US02 | Como patrocinador quiero aportar fondos a campañas académicas. | Alta |
+| US03 | Como usuario quiero consultar balances registrados en blockchain. | Alta |
+| US04 | Como estudiante quiero recibir tokens por completar actividades académicas. | Media |
+| US05 | Como administrador quiero validar despliegues y transacciones. | Media |
+
+---
+
+# 🚀 Sprint Backlog
+
+## Sprint 1
+
+Objetivo:
+
+Construir infraestructura base del proyecto.
+
+Tareas:
+
+- Configuración Rust.
+- Instalación Soroban CLI.
+- Inicialización React.
+- Configuración Node.js.
+
+Estado:
+
+DONE ✅
+
+---
+
+## Sprint 2
+
+Objetivo:
+
+Implementación del Smart Contract.
+
+Tareas:
+
+- lógica de balances.
+- sponsorship funding.
+- transferencias.
+- validaciones de seguridad.
+
+Estado:
+
+DONE ✅
+
+---
+
+## Sprint 3
+
+Objetivo:
+
+Integración completa del ecosistema.
+
+Tareas:
+
+- conectar frontend.
+- conectar backend.
+- pruebas en Stellar Testnet.
+- documentación final.
+
+Estado:
+
+DONE ✅
+
+---
+
+# 📊 Sprint Board
+
+## To Do
+
+- Preparar documentación final.
+
+## In Progress
+
+- Ajustes de testing.
+
+## Done
+
+✔ Smart Contract.
+
+✔ Frontend React.
+
+✔ Backend Node.js.
+
+✔ Stellar Testnet deployment.
+
+✔ Testing.
+
+✔ README.
+
+---
+
+# 📝 GitHub Issues
+
+### Issue #1 — Smart Contract Logic
+
+**Descripción**
+
+Implementar contrato inteligente Soroban para gestionar financiamiento estudiantil.
+
+**Tasks**
+
+- [x] create contract structure
+- [x] implement balances
+- [x] add transfer logic
+- [x] validate signatures
+- [x] testing
+
+---
+
+### Issue #2 — React Dashboard
+
+**Descripción**
+
+Construcción del dashboard principal.
+
+**Tasks**
+
+- [x] create UI
+- [x] student campaign form
+- [x] sponsor panel
+- [x] wallet interaction
+
+---
+
+### Issue #3 — Backend API
+
+**Descripción**
+
+Crear API auxiliar Node.js.
+
+**Tasks**
+
+- [x] authentication
+- [x] routes
+- [x] metadata handling
+- [x] integration support
+
+---
+
+# ☀ Daily Scrum Logs
+
+## Daily 1
+
+**¿Qué hice ayer?**
+
+Configuración inicial del entorno.
+
+**¿Qué haré hoy?**
+
+Implementar almacenamiento del contrato.
+
+**¿Existe algún bloqueo?**
+
+Configuración de Soroban CLI.
+
+---
+
+## Daily 2
+
+**¿Qué hice ayer?**
+
+Finalización de balances y transferencias.
+
+**¿Qué haré hoy?**
+
+Conectar frontend con backend.
+
+**¿Existe algún bloqueo?**
+
+Testing de endpoints.
+
+---
+
+## Daily 3
+
+**¿Qué hice ayer?**
+
+Integración completa.
+
+**¿Qué haré hoy?**
+
+Documentación y revisión final.
+
+**¿Existe algún bloqueo?**
+
+No.
+
+---
+
+# 🔄 Sprint Retrospective
+
+## What went well
+
+- Buena división de responsabilidades.
+- Integración exitosa entre tecnologías.
+- Testing satisfactorio.
+
+---
+
+## What could improve
+
+- Reducir tiempo invertido en configuración inicial.
+- Mejorar automatización de despliegues.
+
+---
+
+## Action Items
+
+- incorporar CI/CD.
+- ampliar cobertura de pruebas.
+- mejorar monitoreo del contrato.
+
+---
+
+# 🌱 Vinculación y Sostenibilidad
+
+SmartTrip fue diseñado con visión de crecimiento real dentro del ecosistema educativo y blockchain.
+
+---
+
+## Feedback Recibido
+
+Feedback simulado basado en revisión académica y usuarios potenciales.
+
+### Estudiantes
+
+Comentarios:
+
+> "La transparencia del financiamiento genera mayor confianza."
+
+Sugerencia:
+
+Agregar métricas visuales del avance de campañas.
+
+---
+
+### Patrocinadores
+
+Comentarios:
+
+> "La plataforma facilita visualizar el impacto educativo de cada aportación."
+
+Sugerencia:
+
+Implementar dashboard de analytics.
+
+---
+
+## Mejoras Basadas en Feedback
+
+Se propusieron nuevas funcionalidades:
+
+- estadísticas de campañas.
+- integración institucional.
+- reputación académica blockchain.
+- dashboards avanzados.
+
+---
+
+# 🛣️ Roadmap de Crecimiento
+
+## V1 — MVP
+
+✔ crowdfunding educativo.
+
+✔ smart contracts.
+
+✔ dashboard inicial.
+
+---
+
+## V2 — Expansión
+
+✔ wallet integration.
+
+✔ analytics.
+
+✔ sistema avanzado de recompensas.
+
+---
+
+## V3 — Escalabilidad
+
+✔ alianzas universitarias.
+
+✔ fundaciones internacionales.
+
+✔ marketplace educativo descentralizado.
+
+---
+
+# 📈 Modelo de Sostenibilidad
+
+SmartTrip propone sostenibilidad mediante:
+
+- alianzas con universidades.
+- colaboración con fundaciones educativas.
+- patrocinio empresarial.
+- programas de visibilidad institucional.
+
+Esto permite crecimiento continuo sin depender exclusivamente de financiamiento académico.
+
+---
+
+# 🔥 Conventional Commit Examples
+
+```bash
+feat(contract): implement sponsorship logic
+
+feat(frontend): add campaign dashboard
+
+fix(api): correct balance endpoint
+
+docs(readme): update installation guide
+
+test(contract): add reward validation tests
+
+refactor(frontend): optimize dashboard rendering
+```
+
